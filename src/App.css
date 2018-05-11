@@ -3,6 +3,19 @@
     width: 100%;
 }
 
+.header-logo {
+    height: 50px;
+}
+
+.ant-layout-header a {
+    float: right;
+    margin-left: 12px;
+    font-size: 17px;
+    text-decoration: underline;
+    text-transform: uppercase;
+    color: black;
+}
+
 .logo {
     padding: 24px 48px 0px 48px;
 }
@@ -37,6 +50,16 @@ small.require {
     text-align: right;
 }
 
+.metamasklogo {
+    width: 28px;
+    margin-right: 10px;
+}
+
+img.disconnect {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
 .react-code-input input::-webkit-outer-spin-button,
 .react-code-input input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -44,7 +67,7 @@ small.require {
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-family: Roboto, Arial, sans-serif;
     font-weight: bolder;
     text-align: center;

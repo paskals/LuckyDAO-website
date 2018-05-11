@@ -1,10 +1,5 @@
 const config = {
-  schemaList: [
-    { value: 'all', name: 'All' },
-    { value: 'gitcoinBounty', name: 'Gitcoin' },
-    { value: 'standardSchema', name: 'Standard Schema' }
-  ],
-  earliestDate: '2017-12-20'
+  infuraUrl: 'https://mainnet.infura.io/TLNJutB9tVbAFdEr3IyY'
 };
 
 export default config;

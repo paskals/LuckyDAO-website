@@ -42,7 +42,7 @@ class CommitForm extends Component {
         <Input
           size="large"
           addonBefore="Number of tickets:"
-          addonAfter="0.01 ETH | 0.2 Deposit"
+          addonAfter={`${0.01 * this.state.number} ETH`}
           type="number"
           min={1}
           defaultValue={this.state.number}

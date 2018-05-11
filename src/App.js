@@ -6,9 +6,10 @@ import Countdown from 'react-countdown-now';
 import CommitForm from './components/CommitForm';
 import RevealForm from './components/RevealForm';
 import logo from './assets/images/logo.png';
+import metamaskIcon from './assets/images/metamask.svg';
 import './App.css';
 
-const { Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 const countdownRenderer = ({
   days, hours, minutes, completed
@@ -37,6 +38,9 @@ class App extends React.Component {
     this.closeReveal = this.closeReveal.bind(this);
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
   }
+  componentDidMount() {
+    this.props.onQuery('', '');
+  }
   onCountdownEnd(v) {
     console.log(v);
   }
@@ -54,25 +58,39 @@ class App extends React.Component {
   }
 
   render() {
+    let status = <img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />;
+    if (this.props.data) {
+      status = <span><img className="metamasklogo" src={metamaskIcon} alt="metamasklogo" />{this.props.data}</span>;
+    }
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout>
+        <Header style={{ background: 'none', padding: '0px 12px' }}>
+          <img className="header-logo" src={logo} alt="logo" />
+          <a src="">How to play</a>
+          <a src="">Admin</a>
+        </Header>
         <Content>
           <Row type="flex" justify="center">
             <Col xl={8}>
               <Spin spinning={false}>
-                <Card cover={<img className="logo" src={logo} alt="logo" />}>
+                <div style={{ padding: '24px 12px' }}>
                   <h1>Jackpot: 192$</h1>
-                  {this.props.error && <Alert
-                    message="Something went wrong"
-                    description="Fetching data error"
-                    type="error"
-                  />}
                   <Countdown
                     date={Date.now() + 5000}
                     renderer={countdownRenderer}
                     onComplete={this.onCountdownEnd}
                   />
                   <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>Play</Button>
+                  {!this.props.fetching && (!this.props.data
+                    ? (<Alert
+                      message={status
+                      }
+                      type="error"
+                    />)
+                    : (<Alert
+                      message={status}
+                      type="info"
+                    />))}
                   <div className="stats">
                     <Row>
                       <Col xs={18}>Raised for charity</Col>
@@ -99,7 +117,7 @@ class App extends React.Component {
                       <Col xs={6}>123</Col>
                     </Row>
                   </div>
-                </Card>
+                </div>
               </Spin>
             </Col>
           </Row>
@@ -114,6 +132,7 @@ class App extends React.Component {
             fields={6}
           />
         </Content>
+        <Footer>Footer</Footer>
       </Layout>
     );
   }

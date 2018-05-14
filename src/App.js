@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Row, Col, Alert, Spin, Card, Layout, Button } from 'antd';
+import { Row, Col, Alert, Spin, Modal, Layout, Button } from 'antd';
 import Countdown from 'react-countdown-now';
 import CommitForm from './components/CommitForm';
 import RevealForm from './components/RevealForm';
@@ -29,13 +29,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openCommit: false,
-      openReveal: false
+      openDialog: false,
+      dialog: null
     };
     this.showCommit = this.showCommit.bind(this);
-    this.closeCommit = this.closeCommit.bind(this);
     this.showReveal = this.showReveal.bind(this);
-    this.closeReveal = this.closeReveal.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
   }
   componentDidMount() {
@@ -44,17 +43,14 @@ class App extends React.Component {
   onCountdownEnd(v) {
     console.log(v);
   }
-  showCommit() {
-    this.setState({ openCommit: true });
+  closeDialog() {
+    this.setState({ openDialog: false });
   }
-  closeCommit() {
-    this.setState({ openCommit: false });
+  showCommit() {
+    this.setState({ dialog: (<CommitForm fields={6} />), openDialog: true });
   }
   showReveal() {
-    this.setState({ openReveal: true });
-  }
-  closeReveal() {
-    this.setState({ openReveal: false });
+    this.setState({ dialog: (<RevealForm fields={6} />), openDialog: true });
   }
 
   render() {
@@ -121,16 +117,14 @@ class App extends React.Component {
               </Spin>
             </Col>
           </Row>
-          <CommitForm
-            open={this.state.openCommit}
-            onClose={this.closeCommit}
-            fields={6}
-          />
-          <RevealForm
-            open={this.state.openReveal}
-            onClose={this.closeReveal}
-            fields={6}
-          />
+          <Modal
+            title="Lucky Draw 1"
+            visible={this.state.openDialog}
+            onCancel={this.closeDialog}
+            footer={null}
+          >
+            {this.state.dialog}
+          </Modal>
         </Content>
         <Footer>Footer</Footer>
       </Layout>

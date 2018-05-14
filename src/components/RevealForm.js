@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Divider, Button } from 'antd';
+import { Divider, Button } from 'antd';
 import ReactCodeInput from 'react-code-input';
 
 class RevealForm extends Component {
@@ -25,12 +25,7 @@ class RevealForm extends Component {
 
   render() {
     return (
-      <Modal
-        title="You have 0.02 ETH deposit"
-        visible={this.props.open}
-        onCancel={this.props.onClose}
-        footer={null}
-      >
+      <div>
         <h5>Reveal secret</h5>
         <div style={{ textAlign: 'center' }} >
           <ReactCodeInput
@@ -54,7 +49,7 @@ class RevealForm extends Component {
           Note that you need to provide the secret numbers you commit here
           before the reveal deadline in order to get your deposit back
         </p>
-      </Modal>
+      </div>
     );
   }
 }

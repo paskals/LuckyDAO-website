@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Input, Divider, Button } from 'antd';
+import { Input, Divider, Button } from 'antd';
 import ReactCodeInput from 'react-code-input';
 
 class CommitForm extends Component {
@@ -33,12 +33,7 @@ class CommitForm extends Component {
 
   render() {
     return (
-      <Modal
-        title="Lucky Draw 1"
-        visible={this.props.open}
-        onCancel={this.props.onClose}
-        footer={null}
-      >
+      <div>
         <Input
           size="large"
           addonBefore="Number of tickets:"
@@ -74,7 +69,7 @@ class CommitForm extends Component {
           Note that you need to provide the secret numbers you commit here
           before the reveal deadline in order to get your deposit back
         </p>
-      </Modal>
+      </div>
     );
   }
 }

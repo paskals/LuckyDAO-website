@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Row, Col, Spin, Modal, Layout, Button } from 'antd';
-import Countdown from 'react-countdown-now';
+import { Row, Col, Spin, Modal, Layout, Button, Divider } from 'antd';
+import CountdownTimer from './components/CountdownTimer';
 import CommitForm from './components/CommitForm';
 import RevealForm from './components/RevealForm';
 import HowToPlay from './components/HowToPlay';
@@ -12,24 +12,11 @@ import './App.css';
 
 const { Header, Footer, Content } = Layout;
 
-const countdownRenderer = ({
-  days, hours, minutes, completed
-}) => {
-  if (completed) {
-    return <p className="countdown">You are good to go!</p>;
-  }
-  return (
-    <p className="countdown">Commit phase end in
-      <br />
-      <span>{days}</span> days <span>{hours}</span> hours <span>{minutes}</span> minutes
-    </p>
-  );
-};
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      phase: 0,
       openDialog: false,
       dialogTitle: '',
       dialog: null
@@ -43,8 +30,12 @@ class App extends React.Component {
   componentDidMount() {
     this.props.onQuery('', '');
   }
-  onCountdownEnd(v) {
-    console.log(v);
+  onCountdownEnd() {
+    if (this.state.phase === 0) {
+      this.setState({ phase: 1 });
+    } else if (this.state.phase === 1) {
+      this.setState({ phase: 2 });
+    }
   }
   closeDialog() {
     this.setState({ openDialog: false });
@@ -63,26 +54,46 @@ class App extends React.Component {
   }
 
   render() {
-
     return (
       <Layout>
         <Header>
           <img src={logo} alt="logo" />
-          <Button>Admin</Button>
           <Button onClick={this.showHowTo}>How to play</Button>
         </Header>
         <Content>
           <Row type="flex" justify="center">
             <Col xl={8}>
               <Spin spinning={false}>
-                <div style={{ padding: '24px 12px' }}>
+                <div style={{ padding: '24px 0px' }}>
                   <h1>Jackpot: 192$</h1>
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={countdownRenderer}
-                    onComplete={this.onCountdownEnd}
-                  />
-                  <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>Play</Button>
+
+                  {this.state.phase === 0 &&
+                    (
+                      <div>
+                        <CountdownTimer
+                          phase="Commit"
+                          date={Date.now() + 5000}
+                          onCountdownEnd={this.onCountdownEnd}
+                        />
+                        <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>Play</Button>
+                      </div>
+                    )
+                  }
+                  {this.state.phase === 1 &&
+                    (
+                      <div>
+                        <CountdownTimer
+                          phase="Reveal"
+                          date={Date.now() + 500000}
+                          onCountdownEnd={this.onCountdownEnd}
+                        />
+                        <Button className="big-button" type="primary" size="large" onClick={this.showReveal}>Reveal</Button>
+                      </div>
+                    )
+                  }
+                  {this.state.phase === 2 &&
+                    <p className="countdown">NO campaign active</p>
+                  }
                   <MetamaskStatus {...this.props} />
                   <div className="stats">
                     <Row>
@@ -123,7 +134,7 @@ class App extends React.Component {
             {this.state.dialog}
           </Modal>
         </Content>
-        <Footer>© 2018 Bakaoh</Footer>
+        <Footer><Divider />© 2018 Bakaoh</Footer>
       </Layout>
     );
   }

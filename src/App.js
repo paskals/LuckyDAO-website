@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Row, Col, Alert, Spin, Modal, Layout, Button } from 'antd';
+import { Row, Col, Spin, Modal, Layout, Button } from 'antd';
 import Countdown from 'react-countdown-now';
 import CommitForm from './components/CommitForm';
 import RevealForm from './components/RevealForm';
+import HowToPlay from './components/HowToPlay';
+import MetamaskStatus from './components/MetamaskStatus';
 import logo from './assets/images/logo.png';
-import metamaskIcon from './assets/images/metamask.svg';
 import './App.css';
 
 const { Header, Footer, Content } = Layout;
@@ -30,10 +31,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       openDialog: false,
+      dialogTitle: '',
       dialog: null
     };
     this.showCommit = this.showCommit.bind(this);
     this.showReveal = this.showReveal.bind(this);
+    this.showHowTo = this.showHowTo.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
   }
@@ -46,24 +49,27 @@ class App extends React.Component {
   closeDialog() {
     this.setState({ openDialog: false });
   }
+  showDialog(dialogTitle, dialog) {
+    this.setState({ dialogTitle, dialog, openDialog: true });
+  }
   showCommit() {
-    this.setState({ dialog: (<CommitForm fields={6} />), openDialog: true });
+    this.showDialog('Lucky Draw 1: Buy Ticket', (<CommitForm fields={6} />));
   }
   showReveal() {
-    this.setState({ dialog: (<RevealForm fields={6} />), openDialog: true });
+    this.showDialog('You have 0.02 ETH deposit', (<RevealForm fields={6} />));
+  }
+  showHowTo() {
+    this.showDialog('How to play', (<HowToPlay />));
   }
 
   render() {
-    let status = <img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />;
-    if (this.props.data) {
-      status = <span><img className="metamasklogo" src={metamaskIcon} alt="metamasklogo" />{this.props.data}</span>;
-    }
+
     return (
       <Layout>
-        <Header style={{ background: 'none', padding: '0px 12px' }}>
-          <img className="header-logo" src={logo} alt="logo" />
-          <a src="">How to play</a>
-          <a src="">Admin</a>
+        <Header>
+          <img src={logo} alt="logo" />
+          <Button>Admin</Button>
+          <Button onClick={this.showHowTo}>How to play</Button>
         </Header>
         <Content>
           <Row type="flex" justify="center">
@@ -77,16 +83,7 @@ class App extends React.Component {
                     onComplete={this.onCountdownEnd}
                   />
                   <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>Play</Button>
-                  {!this.props.fetching && (!this.props.data
-                    ? (<Alert
-                      message={status
-                      }
-                      type="error"
-                    />)
-                    : (<Alert
-                      message={status}
-                      type="info"
-                    />))}
+                  <MetamaskStatus {...this.props} />
                   <div className="stats">
                     <Row>
                       <Col xs={18}>Raised for charity</Col>
@@ -118,7 +115,7 @@ class App extends React.Component {
             </Col>
           </Row>
           <Modal
-            title="Lucky Draw 1"
+            title={this.state.dialogTitle}
             visible={this.state.openDialog}
             onCancel={this.closeDialog}
             footer={null}
@@ -126,7 +123,7 @@ class App extends React.Component {
             {this.state.dialog}
           </Modal>
         </Content>
-        <Footer>Footer</Footer>
+        <Footer>© 2018 Bakaoh</Footer>
       </Layout>
     );
   }

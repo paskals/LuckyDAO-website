@@ -62,9 +62,9 @@ class App extends React.Component {
         </Header>
         <Content>
           <Row type="flex" justify="center">
-            <Col xl={8}>
+            <Col xl={8} xs={24}>
               <Spin spinning={false}>
-                <div style={{ padding: '24px 0px' }}>
+                <div style={{ padding: '24px 12px' }}>
                   <h1>Jackpot: 192$</h1>
 
                   {this.state.phase === 0 &&
@@ -112,11 +112,12 @@ class App extends React.Component {
                       <Col xs={18}>Your chance of winning</Col>
                       <Col xs={6}>123</Col>
                     </Row>
-                    <Row>
+                    <Divider />
+                    <Row className="lighter">
                       <Col xs={18}>Total won</Col>
                       <Col xs={6}>123</Col>
                     </Row>
-                    <Row>
+                    <Row className="lighter">
                       <Col xs={18}>Total raised for charity</Col>
                       <Col xs={6}>123</Col>
                     </Row>

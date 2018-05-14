@@ -9,14 +9,14 @@ const MetamaskStatus = (props) => {
   if (props.data) {
     return (
       <Alert
-        message={<span><img className="metamasklogo" src={metamaskIcon} alt="metamasklogo" />{props.data}</span>}
+        message={<span><img className="metamasklogo" src={metamaskIcon} alt="metamasklogo" />Web3 connected</span>}
         type="info"
       />
     );
   }
   return (
     <Alert
-      message={<img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />}
+      message={<span><img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />Please install Metamask</span>}
       type="error"
     />
   );

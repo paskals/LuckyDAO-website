@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Row, Col, Spin, Modal, Layout, Button, Divider } from 'antd';
+import { Row, Col, Spin, Modal, Layout, Button, Divider, Radio } from 'antd';
 import CountdownTimer from './components/CountdownTimer';
+import AdminForm from './components/AdminForm';
 import CommitForm from './components/CommitForm';
 import RevealForm from './components/RevealForm';
 import HowToPlay from './components/HowToPlay';
@@ -12,6 +13,8 @@ import './App.css';
 import api from './api';
 
 const { Header, Footer, Content } = Layout;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 class App extends React.Component {
   constructor(props) {
@@ -26,6 +29,7 @@ class App extends React.Component {
     this.showReveal = this.showReveal.bind(this);
     this.showHowTo = this.showHowTo.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
+    this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
   }
   componentDidMount() {
@@ -34,6 +38,10 @@ class App extends React.Component {
   }
   onCountdownEnd() {
     this.closeDialog();
+  }
+  handleChangeCurrency(e) {
+    api.setCurrency(e.target.value);
+    this.forceUpdate();
   }
   closeDialog() {
     this.setState({ openDialog: false });
@@ -44,11 +52,8 @@ class App extends React.Component {
   showAdmin() {
     this.showDialog(
       'Admin', (
-        <CommitForm
-          fields={6}
-          ticketPrice={this.props.info.ticketPrice}
-          depositFraction={this.props.info.depositFraction}
-          onCommit={this.props.postCommit}
+        <AdminForm
+          onCreate={this.props.postCreate}
         />
       )
     );
@@ -137,7 +142,7 @@ class App extends React.Component {
                       <div>
                         <p className="countdown">NO campaign active</p>
                         {this.props.account.isAdmin &&
-                          <Button className="big-button" type="primary" size="large" onClick={this.showAdmin}>ADMIN</Button>
+                          <Button className="big-button" type="primary" size="large" onClick={this.showAdmin}>CREATE CAMPAIGN</Button>
                         }
                       </div>
                     }
@@ -187,8 +192,19 @@ class App extends React.Component {
             {this.state.dialog}
           </Modal>
         </Content>
-        <Footer><Divider />© 2018 Bakaoh</Footer>
-      </Layout>
+        <Footer>
+          <Divider />
+          <span>© 2018 Bakaoh</span>
+          <RadioGroup
+            style={{ float: 'right' }}
+            onChange={this.handleChangeCurrency}
+            defaultValue={api.currency}
+          >
+            <RadioButton value="ETH">ETH</RadioButton>
+            <RadioButton value="USD">USD</RadioButton>
+          </RadioGroup>
+        </Footer>
+      </Layout >
     );
   }
 }
@@ -204,7 +220,8 @@ const mapDispatchToProps = dispatch => ({
   getInfo: () => dispatch({ type: 'INFO_REQUEST' }),
   getAccount: () => dispatch({ type: 'ACCOUNT_REQUEST' }),
   postCommit: (weiValue, secret) => dispatch({ type: 'COMMIT_REQUEST', weiValue, secret }),
-  postReveal: secret => dispatch({ type: 'REVEAL_REQUEST', secret })
+  postReveal: secret => dispatch({ type: 'REVEAL_REQUEST', secret }),
+  postCreate: values => dispatch({ type: 'CREATE_REQUEST', values })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

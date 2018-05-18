@@ -12,12 +12,18 @@ if (
   myweb3 = new Web3(new Web3.providers.HttpProvider(config.infuraUrl));
 }
 
-myweb3.eth.net.getId().then((netId) => { console.log(netId); });
+myweb3.eth.net.getId().then((netId) => {
+  // TODO: check networkId to set api.constractAddress
+});
 
 const api = {
 
   currency: 'ETH',
   constractAddress: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
+
+  setCurrency: function setCurrency(e) {
+    api.currency = e;
+  },
 
   toWei: function toWei(value, unit) {
     return myweb3.utils.toWei(value, unit);
@@ -33,6 +39,7 @@ const api = {
   },
 
   getAccountInfo: function getAccountInfo() {
+    // TODO: get account info from web3 and contract
     return myweb3.eth.getAccounts()
       .then(acc => (acc.length > 0
         ? {
@@ -45,6 +52,7 @@ const api = {
   },
 
   postCommit: function commit(weiValue, secret) {
+    // TODO: create transaction
     return myweb3.eth.getAccounts().then(accounts => myweb3.eth
       .sendTransaction({
         from: accounts[0],
@@ -55,6 +63,7 @@ const api = {
   },
 
   postReveal: function reveal(secret) {
+    // TODO: create transaction
     return myweb3.eth.getAccounts().then(accounts => myweb3.eth
       .sendTransaction({
         from: accounts[0],
@@ -63,20 +72,31 @@ const api = {
       }));
   },
 
+  postCreate: function createCampaign(values) {
+    // TODO: create transaction
+    console.log(values);
+    return myweb3.eth.getAccounts().then(accounts => myweb3.eth
+      .sendTransaction({
+        from: accounts[0],
+        to: api.constractAddress
+      }));
+  },
+
   getCampainInfo: function getCampainInfo() {
+    // TODO: get info from contract
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(Object.assign({}, {
           depositFraction: 2,
           commitStart: Date.now(),
-          commitEnd: Date.now() + 5000,
+          commitEnd: Date.now() + 500000,
           revealEnd: Date.now() + 500000,
-          jackpot: api.toWei('1928', 'ether'),
-          raisedCharity: api.toWei('23', 'ether'),
-          ticketsSold: 456,
+          jackpot: api.toWei('18.56', 'ether'),
+          raisedCharity: api.toWei('3.71', 'ether'),
+          ticketsSold: 1856,
           ticketPrice: api.toWei('0.1', 'ether'),
           totalWon: 4,
-          totalRaisedCharity: api.toWei('34258', 'ether')
+          totalRaisedCharity: api.toWei('18.56', 'ether')
         }));
       }, 1000);
     });

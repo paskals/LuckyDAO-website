@@ -19,6 +19,15 @@ function* workerReveal(params) {
   }
 }
 
+function* workerCreate(params) {
+  try {
+    const data = yield call(api.postCreate, params.values);
+    yield put({ type: 'CREATE_SUCCESS', data });
+  } catch (error) {
+    yield put({ type: 'CREATE_FAILURE', error });
+  }
+}
+
 function* workerAccount() {
   try {
     const data = yield call(api.getAccountInfo);
@@ -43,6 +52,7 @@ export default function* watcherSaga() {
     takeLatest('ACCOUNT_REQUEST', workerAccount),
     takeLatest('INFO_REQUEST', workerInfo),
     takeLatest('COMMIT_REQUEST', workerCommit),
-    takeLatest('REVEAL_REQUEST', workerReveal)
+    takeLatest('REVEAL_REQUEST', workerReveal),
+    takeLatest('CREATE_REQUEST', workerCreate)
   ]);
 }

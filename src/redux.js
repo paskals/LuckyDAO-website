@@ -15,6 +15,10 @@ const REVEAL_REQUEST = 'REVEAL_REQUEST';
 const REVEAL_SUCCESS = 'REVEAL_SUCCESS';
 const REVEAL_FAILURE = 'REVEAL_FAILURE';
 
+const CREATE_REQUEST = 'CREATE_REQUEST';
+const CREATE_SUCCESS = 'CREATE_SUCCESS';
+const CREATE_FAILURE = 'CREATE_FAILURE';
+
 // reducer with initial state
 const initialState = {
   fetching: false,
@@ -54,6 +58,14 @@ export default function reducer(state = initialState, action) {
     case REVEAL_SUCCESS:
       return { ...state, fetching: false, data: action.data };
     case REVEAL_FAILURE:
+      return {
+        ...state, fetching: false, data: null, error: action.error
+      };
+    case CREATE_REQUEST:
+      return { ...state, fetching: true, error: null };
+    case CREATE_SUCCESS:
+      return { ...state, fetching: false, data: action.data };
+    case CREATE_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };

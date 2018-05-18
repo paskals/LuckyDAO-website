@@ -22,6 +22,11 @@
     text-transform: uppercase;
 }
 
+.ant-layout-footer {
+    background: none;
+    padding: 0px 12px 24px 12px;
+}
+
 small.ticket-price {
     float: right;
     margin: 8px;

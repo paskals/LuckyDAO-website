@@ -1,15 +1,15 @@
 // action types
-const ACCOUNT_API_CALL_REQUEST = 'ACCOUNT_API_CALL_REQUEST';
-const ACCOUNT_API_CALL_SUCCESS = 'ACCOUNT_API_CALL_SUCCESS';
-const ACCOUNT_API_CALL_FAILURE = 'ACCOUNT_API_CALL_FAILURE';
+const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';
+const ACCOUNT_SUCCESS = 'ACCOUNT_SUCCESS';
+const ACCOUNT_FAILURE = 'ACCOUNT_FAILURE';
 
-const INFO_API_CALL_REQUEST = 'INFO_API_CALL_REQUEST';
-const INFO_API_CALL_SUCCESS = 'INFO_API_CALL_SUCCESS';
-const INFO_API_CALL_FAILURE = 'INFO_API_CALL_FAILURE';
+const INFO_REQUEST = 'INFO_REQUEST';
+const INFO_SUCCESS = 'INFO_SUCCESS';
+const INFO_FAILURE = 'INFO_FAILURE';
 
-const COMMIT_API_CALL_REQUEST = 'COMMIT_API_CALL_REQUEST';
-const COMMIT_API_CALL_SUCCESS = 'COMMIT_API_CALL_SUCCESS';
-const COMMIT_API_CALL_FAILURE = 'COMMIT_API_CALL_FAILURE';
+const COMMIT_REQUEST = 'COMMIT_REQUEST';
+const COMMIT_SUCCESS = 'COMMIT_SUCCESS';
+const COMMIT_FAILURE = 'COMMIT_FAILURE';
 
 // reducer with initial state
 const initialState = {
@@ -21,27 +21,27 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case ACCOUNT_API_CALL_REQUEST:
+    case ACCOUNT_REQUEST:
       return { ...state, fetching: true, error: null };
-    case ACCOUNT_API_CALL_SUCCESS:
+    case ACCOUNT_SUCCESS:
       return { ...state, fetching: false, account: action.account };
-    case ACCOUNT_API_CALL_FAILURE:
+    case ACCOUNT_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };
-    case INFO_API_CALL_REQUEST:
+    case INFO_REQUEST:
       return { ...state, fetching: true, error: null };
-    case INFO_API_CALL_SUCCESS:
+    case INFO_SUCCESS:
       return { ...state, fetching: false, info: action.info };
-    case INFO_API_CALL_FAILURE:
+    case INFO_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };
-    case COMMIT_API_CALL_REQUEST:
+    case COMMIT_REQUEST:
       return { ...state, fetching: true, error: null };
-    case COMMIT_API_CALL_SUCCESS:
+    case COMMIT_SUCCESS:
       return { ...state, fetching: false, data: action.data };
-    case COMMIT_API_CALL_FAILURE:
+    case COMMIT_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };

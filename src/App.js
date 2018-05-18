@@ -194,9 +194,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInfo: () => dispatch({ type: 'INFO_API_CALL_REQUEST' }),
-  getAccount: () => dispatch({ type: 'ACCOUNT_API_CALL_REQUEST' }),
-  postCommit: (ticket, secret) => dispatch({ type: 'COMMIT_API_CALL_REQUEST', ticket, secret })
+  getInfo: () => dispatch({ type: 'INFO_REQUEST' }),
+  getAccount: () => dispatch({ type: 'ACCOUNT_REQUEST' }),
+  postCommit: (weiValue, secret) => dispatch({ type: 'COMMIT_REQUEST', weiValue, secret })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

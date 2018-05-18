@@ -3,39 +3,36 @@ import api from './api';
 
 function* workerCommit(params) {
   try {
-    console.log(params);
-    const data = yield call(api.postCommit, params.ticket, params.secret);
-    console.log(data);
-    yield put({ type: 'COMMIT_API_CALL_SUCCESS', data });
+    const data = yield call(api.postCommit, params.weiValue, params.secret);
+    yield put({ type: 'COMMIT_SUCCESS', data });
   } catch (error) {
-    console.log(error);
-    yield put({ type: 'COMMIT_API_CALL_FAILURE', error });
+    yield put({ type: 'COMMIT_FAILURE', error });
   }
 }
 
 function* workerAccount() {
   try {
     const data = yield call(api.getAccountInfo);
-    yield put({ type: 'ACCOUNT_API_CALL_SUCCESS', account: data });
+    yield put({ type: 'ACCOUNT_SUCCESS', account: data });
   } catch (error) {
-    yield put({ type: 'ACCOUNT_API_CALL_FAILURE', error });
+    yield put({ type: 'ACCOUNT_FAILURE', error });
   }
 }
 
 function* workerInfo() {
   try {
     const data = yield call(api.getCampainInfo);
-    yield put({ type: 'INFO_API_CALL_SUCCESS', info: data });
+    yield put({ type: 'INFO_SUCCESS', info: data });
   } catch (error) {
-    yield put({ type: 'INFO_API_CALL_FAILURE', error });
+    yield put({ type: 'INFO_FAILURE', error });
   }
 }
 
 // watcher saga: watches for actions dispatched to the store, starts worker saga
 export default function* watcherSaga() {
   yield all([
-    takeLatest('ACCOUNT_API_CALL_REQUEST', workerAccount),
-    takeLatest('INFO_API_CALL_REQUEST', workerInfo),
-    takeLatest('COMMIT_API_CALL_REQUEST', workerCommit)
+    takeLatest('ACCOUNT_REQUEST', workerAccount),
+    takeLatest('INFO_REQUEST', workerInfo),
+    takeLatest('COMMIT_REQUEST', workerCommit)
   ]);
 }

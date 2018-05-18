@@ -28,7 +28,7 @@ class CommitForm extends Component {
   handleBuy(e) {
     e.preventDefault();
     if (!this.state.numberError && !this.state.secretError) {
-      this.props.onCommit(this.state.number, this.state.secret);
+      this.props.onCommit(this.props.ticketPrice * this.state.number, this.state.secret);
     }
   }
 

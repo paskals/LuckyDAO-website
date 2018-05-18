@@ -10,6 +10,15 @@ function* workerCommit(params) {
   }
 }
 
+function* workerReveal(params) {
+  try {
+    const data = yield call(api.postReveal, params.secret);
+    yield put({ type: 'REVEAL_SUCCESS', data });
+  } catch (error) {
+    yield put({ type: 'REVEAL_FAILURE', error });
+  }
+}
+
 function* workerAccount() {
   try {
     const data = yield call(api.getAccountInfo);
@@ -33,6 +42,7 @@ export default function* watcherSaga() {
   yield all([
     takeLatest('ACCOUNT_REQUEST', workerAccount),
     takeLatest('INFO_REQUEST', workerInfo),
-    takeLatest('COMMIT_REQUEST', workerCommit)
+    takeLatest('COMMIT_REQUEST', workerCommit),
+    takeLatest('REVEAL_REQUEST', workerReveal)
   ]);
 }

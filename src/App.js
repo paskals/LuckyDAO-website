@@ -66,7 +66,14 @@ class App extends React.Component {
     );
   }
   showReveal() {
-    this.showDialog('You have 0.02 ETH deposit', (<RevealForm fields={6} />));
+    this.showDialog(
+      `You have ${api.printWei((this.props.info.ticketPrice * this.props.account.tickets * this.props.info.depositFraction) / 100)} deposit`, (
+        <RevealForm
+          fields={6}
+          onReveal={this.props.postReveal}
+        />
+      )
+    );
   }
   showHowTo() {
     this.showDialog('How to play', (<HowToPlay />));
@@ -120,7 +127,7 @@ class App extends React.Component {
                             onCountdownEnd={this.onCountdownEnd}
                           />
                           {this.props.account.address
-                            ? <Button className="big-button" type="primary" size="large" onClick={this.showReveal}>REVEAL</Button>
+                            ? <Button disabled={!this.props.account.tickets} className="big-button" type="primary" size="large" onClick={this.showReveal}>REVEAL</Button>
                             : <MetamaskStatus {...this.props} />
                           }
                         </div>
@@ -196,7 +203,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getInfo: () => dispatch({ type: 'INFO_REQUEST' }),
   getAccount: () => dispatch({ type: 'ACCOUNT_REQUEST' }),
-  postCommit: (weiValue, secret) => dispatch({ type: 'COMMIT_REQUEST', weiValue, secret })
+  postCommit: (weiValue, secret) => dispatch({ type: 'COMMIT_REQUEST', weiValue, secret }),
+  postReveal: secret => dispatch({ type: 'REVEAL_REQUEST', secret })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

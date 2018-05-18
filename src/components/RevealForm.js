@@ -18,8 +18,8 @@ class RevealForm extends Component {
   }
   handleReveal(e) {
     e.preventDefault();
-    if (!this.state.numberError && !this.state.secretError) {
-      this.props.onBuy(this.state.number, this.state.secret);
+    if (!this.state.secretError) {
+      this.props.onReveal(this.state.secret);
     }
   }
 
@@ -37,7 +37,7 @@ class RevealForm extends Component {
         {this.state.secret && this.state.secretError && <small className="require">Secret must have length of 6</small>}
         <Divider />
         <Button
-          onClick={this.handleBuy}
+          onClick={this.handleReveal}
           disabled={this.state.secretError || this.state.numberError}
           className="big-button"
           type="primary"

@@ -38,7 +38,7 @@ const api = {
         ? {
           address: acc[0],
           isAdmin: true,
-          tickets: 38
+          tickets: 0
         } : {
           address: null
         }));
@@ -54,13 +54,22 @@ const api = {
       }));
   },
 
+  postReveal: function reveal(secret) {
+    return myweb3.eth.getAccounts().then(accounts => myweb3.eth
+      .sendTransaction({
+        from: accounts[0],
+        to: api.constractAddress,
+        data: secret
+      }));
+  },
+
   getCampainInfo: function getCampainInfo() {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(Object.assign({}, {
           depositFraction: 2,
-          commitStart: Date.now() + 5000,
-          commitEnd: Date.now() + 500000,
+          commitStart: Date.now(),
+          commitEnd: Date.now() + 5000,
           revealEnd: Date.now() + 500000,
           jackpot: api.toWei('1928', 'ether'),
           raisedCharity: api.toWei('23', 'ether'),

@@ -11,6 +11,10 @@ const COMMIT_REQUEST = 'COMMIT_REQUEST';
 const COMMIT_SUCCESS = 'COMMIT_SUCCESS';
 const COMMIT_FAILURE = 'COMMIT_FAILURE';
 
+const REVEAL_REQUEST = 'REVEAL_REQUEST';
+const REVEAL_SUCCESS = 'REVEAL_SUCCESS';
+const REVEAL_FAILURE = 'REVEAL_FAILURE';
+
 // reducer with initial state
 const initialState = {
   fetching: false,
@@ -42,6 +46,14 @@ export default function reducer(state = initialState, action) {
     case COMMIT_SUCCESS:
       return { ...state, fetching: false, data: action.data };
     case COMMIT_FAILURE:
+      return {
+        ...state, fetching: false, data: null, error: action.error
+      };
+    case REVEAL_REQUEST:
+      return { ...state, fetching: true, error: null };
+    case REVEAL_SUCCESS:
+      return { ...state, fetching: false, data: action.data };
+    case REVEAL_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };

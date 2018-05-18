@@ -9,6 +9,7 @@ import HowToPlay from './components/HowToPlay';
 import MetamaskStatus from './components/MetamaskStatus';
 import logo from './assets/images/logo.png';
 import './App.css';
+import api from './api';
 
 const { Header, Footer, Content } = Layout;
 
@@ -16,7 +17,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phase: 0,
       openDialog: false,
       dialogTitle: '',
       dialog: null
@@ -28,14 +28,11 @@ class App extends React.Component {
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
   }
   componentDidMount() {
-    this.props.onQuery('', '');
+    this.props.getInfo();
+    this.props.getAccount();
   }
   onCountdownEnd() {
-    if (this.state.phase === 0) {
-      this.setState({ phase: 1 });
-    } else if (this.state.phase === 1) {
-      this.setState({ phase: 2 });
-    }
+    this.closeDialog();
   }
   closeDialog() {
     this.setState({ openDialog: false });
@@ -44,13 +41,30 @@ class App extends React.Component {
     this.setState({ dialogTitle, dialog, openDialog: true });
   }
   showCommit() {
-    this.showDialog('Lucky Draw 1: Buy Ticket', (<CommitForm fields={6} />));
+    this.showDialog(
+      'Lucky Draw: Buy Ticket', (
+        <CommitForm
+          fields={6}
+          ticketPrice={this.props.info.ticketPrice}
+          depositFraction={this.props.info.depositFraction}
+        />
+      )
+    );
   }
   showReveal() {
     this.showDialog('You have 0.02 ETH deposit', (<RevealForm fields={6} />));
   }
   showHowTo() {
     this.showDialog('How to play', (<HowToPlay />));
+  }
+  currentPhase() {
+    const now = Date.now();
+    if (now >= this.props.info.commitStart && now < this.props.info.commitEnd) {
+      return 'commit';
+    } else if (now < this.props.info.revealEnd && now() >= this.props.info.commitEnd) {
+      return 'reveal';
+    }
+    return 'inactive';
   }
 
   render() {
@@ -63,66 +77,78 @@ class App extends React.Component {
         <Content>
           <Row type="flex" justify="center">
             <Col xl={8} xs={24}>
-              <Spin spinning={false}>
-                <div style={{ padding: '24px 12px' }}>
-                  <h1>Jackpot: 192$</h1>
+              <Spin spinning={this.props.fetching}>
+                {this.props.info &&
+                  <div style={{ padding: '24px 12px' }}>
+                    <h1>Jackpot: {api.printWei(this.props.info.jackpot)}</h1>
 
-                  {this.state.phase === 0 &&
-                    (
-                      <div>
-                        <CountdownTimer
-                          phase="Commit"
-                          date={Date.now() + 5000}
-                          onCountdownEnd={this.onCountdownEnd}
-                        />
-                        <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>Play</Button>
-                      </div>
-                    )
-                  }
-                  {this.state.phase === 1 &&
-                    (
-                      <div>
-                        <CountdownTimer
-                          phase="Reveal"
-                          date={Date.now() + 500000}
-                          onCountdownEnd={this.onCountdownEnd}
-                        />
-                        <Button className="big-button" type="primary" size="large" onClick={this.showReveal}>Reveal</Button>
-                      </div>
-                    )
-                  }
-                  {this.state.phase === 2 &&
-                    <p className="countdown">NO campaign active</p>
-                  }
-                  <MetamaskStatus {...this.props} />
-                  <div className="stats">
-                    <Row>
-                      <Col xs={18}>Raised for charity</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
-                    <Row>
-                      <Col xs={18}>Total tickets sold</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
-                    <Row>
-                      <Col xs={18}>Your tickets</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
-                    <Row>
-                      <Col xs={18}>Your chance of winning</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
-                    <Divider />
-                    <Row className="lighter">
-                      <Col xs={18}>Total won</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
-                    <Row className="lighter">
-                      <Col xs={18}>Total raised for charity</Col>
-                      <Col xs={6}>123</Col>
-                    </Row>
+                    {this.currentPhase() === 'commit' &&
+                      (
+                        <div>
+                          <CountdownTimer
+                            phase="Commit"
+                            date={this.props.info.commitEnd}
+                            onCountdownEnd={this.onCountdownEnd}
+                          />
+                          {this.props.account.address
+                            ? <Button className="big-button" type="primary" size="large" onClick={this.showCommit}>PLAY</Button>
+                            : <MetamaskStatus {...this.props} />
+                          }
+                        </div>
+                      )
+                    }
+                    {this.currentPhase() === 'reveal' &&
+                      (
+                        <div>
+                          <CountdownTimer
+                            phase="Reveal"
+                            date={this.props.info.revealEnd}
+                            onCountdownEnd={this.onCountdownEnd}
+                          />
+                          {this.props.account.address
+                            ? <Button className="big-button" type="primary" size="large" onClick={this.showReveal}>REVEAL</Button>
+                            : <MetamaskStatus {...this.props} />
+                          }
+                        </div>
+                      )
+                    }
+                    {this.currentPhase() === 'inactive' &&
+                      <p className="countdown">NO campaign active</p>
+                    }
+
+                    <div className="stats">
+                      <Row>
+                        <Col xs={18}>Raised for charity</Col>
+                        <Col xs={6}>{api.printWei(this.props.info.raisedCharity)}</Col>
+                      </Row>
+                      <Row>
+                        <Col xs={18}>Total tickets sold</Col>
+                        <Col xs={6}>{this.props.info.ticketsSold}</Col>
+                      </Row>
+                      {this.props.account.address &&
+                        <div>
+                          <Row>
+                            <Col xs={18}>Your tickets</Col>
+                            <Col xs={6}>{this.props.account.tickets}</Col>
+                          </Row>
+                          <Row>
+                            <Col xs={18}>Your chance of winning</Col>
+                            <Col xs={6}>{Math.round((10000 * this.props.account.tickets) / this.props.info.ticketsSold) / 100}%</Col>
+                          </Row>
+                        </div>
+                      }
+                      <Divider />
+                      <Row className="lighter">
+                        <Col xs={18}>Total won</Col>
+                        <Col xs={6}>{this.props.info.totalWon}</Col>
+                      </Row>
+                      <Row className="lighter">
+                        <Col xs={18}>Total raised for charity</Col>
+                        <Col xs={6}>{api.printWei(this.props.info.totalRaisedCharity)}</Col>
+                      </Row>
+                    </div>
                   </div>
-                </div>
+                }
               </Spin>
             </Col>
           </Row>
@@ -143,11 +169,14 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   fetching: state.fetching,
-  data: state.data,
+  account: state.account,
+  info: state.info,
   error: state.error
 });
 
 const mapDispatchToProps = dispatch => ({
+  getInfo: () => dispatch({ type: 'INFO_API_CALL_REQUEST' }),
+  getAccount: () => dispatch({ type: 'ACCOUNT_API_CALL_REQUEST' }),
   onQuery: (schema, range) => dispatch({ type: 'API_CALL_REQUEST', schema, range })
 });
 

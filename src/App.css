@@ -1,6 +1,7 @@
 .big-button {
     margin: 0px 0px 24px 0px;
     width: 100%;
+    text-transform: uppercase;
 }
 
 .ant-layout-header {

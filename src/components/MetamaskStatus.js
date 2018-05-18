@@ -6,7 +6,7 @@ const MetamaskStatus = (props) => {
   if (props.fetching) {
     return null;
   }
-  if (props.data) {
+  if (props.account.address) {
     return (
       <Alert
         message={<span><img className="metamasklogo" src={metamaskIcon} alt="metamasklogo" />Web3 connected</span>}
@@ -16,7 +16,7 @@ const MetamaskStatus = (props) => {
   }
   return (
     <Alert
-      message={<span><img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />Please install Metamask</span>}
+      message={<span><img className="metamasklogo disconnect" src={metamaskIcon} alt="metamasklogo" />Please install Metamask and unlock account</span>}
       type="error"
     />
   );

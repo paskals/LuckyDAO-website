@@ -1,22 +1,35 @@
 // action types
-const API_CALL_REQUEST = 'API_CALL_REQUEST';
-const API_CALL_SUCCESS = 'API_CALL_SUCCESS';
-const API_CALL_FAILURE = 'API_CALL_FAILURE';
+const ACCOUNT_API_CALL_REQUEST = 'ACCOUNT_API_CALL_REQUEST';
+const ACCOUNT_API_CALL_SUCCESS = 'ACCOUNT_API_CALL_SUCCESS';
+const ACCOUNT_API_CALL_FAILURE = 'ACCOUNT_API_CALL_FAILURE';
+
+const INFO_API_CALL_REQUEST = 'INFO_API_CALL_REQUEST';
+const INFO_API_CALL_SUCCESS = 'INFO_API_CALL_SUCCESS';
+const INFO_API_CALL_FAILURE = 'INFO_API_CALL_FAILURE';
 
 // reducer with initial state
 const initialState = {
   fetching: false,
-  data: null,
+  account: null,
+  info: null,
   error: null
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case API_CALL_REQUEST:
+    case ACCOUNT_API_CALL_REQUEST:
       return { ...state, fetching: true, error: null };
-    case API_CALL_SUCCESS:
-      return { ...state, fetching: false, data: action.data };
-    case API_CALL_FAILURE:
+    case ACCOUNT_API_CALL_SUCCESS:
+      return { ...state, fetching: false, account: action.account };
+    case ACCOUNT_API_CALL_FAILURE:
+      return {
+        ...state, fetching: false, data: null, error: action.error
+      };
+    case INFO_API_CALL_REQUEST:
+      return { ...state, fetching: true, error: null };
+    case INFO_API_CALL_SUCCESS:
+      return { ...state, fetching: false, info: action.info };
+    case INFO_API_CALL_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };

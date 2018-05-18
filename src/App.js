@@ -21,6 +21,7 @@ class App extends React.Component {
       dialogTitle: '',
       dialog: null
     };
+    this.showAdmin = this.showAdmin.bind(this);
     this.showCommit = this.showCommit.bind(this);
     this.showReveal = this.showReveal.bind(this);
     this.showHowTo = this.showHowTo.bind(this);
@@ -39,6 +40,17 @@ class App extends React.Component {
   }
   showDialog(dialogTitle, dialog) {
     this.setState({ dialogTitle, dialog, openDialog: true });
+  }
+  showAdmin() {
+    this.showDialog(
+      'Admin', (
+        <CommitForm
+          fields={6}
+          ticketPrice={this.props.info.ticketPrice}
+          depositFraction={this.props.info.depositFraction}
+        />
+      )
+    );
   }
   showCommit() {
     this.showDialog(
@@ -61,7 +73,7 @@ class App extends React.Component {
     const now = Date.now();
     if (now >= this.props.info.commitStart && now < this.props.info.commitEnd) {
       return 'commit';
-    } else if (now < this.props.info.revealEnd && now() >= this.props.info.commitEnd) {
+    } else if (now < this.props.info.revealEnd && now >= this.props.info.commitEnd) {
       return 'reveal';
     }
     return 'inactive';
@@ -113,7 +125,12 @@ class App extends React.Component {
                       )
                     }
                     {this.currentPhase() === 'inactive' &&
-                      <p className="countdown">NO campaign active</p>
+                      <div>
+                        <p className="countdown">NO campaign active</p>
+                        {this.props.account.isAdmin &&
+                          <Button className="big-button" type="primary" size="large" onClick={this.showAdmin}>ADMIN</Button>
+                        }
+                      </div>
                     }
 
                     <div className="stats">

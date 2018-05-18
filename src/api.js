@@ -48,7 +48,7 @@ const api = {
       setTimeout(() => {
         resolve(Object.assign({}, {
           depositFraction: 2,
-          commitStart: Date.now(),
+          commitStart: Date.now() + 50000,
           commitEnd: Date.now() + 500000,
           revealEnd: Date.now() + 500000,
           jackpot: api.toWei('1928', 'ether'),

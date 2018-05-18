@@ -1,7 +1,18 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import api from './api';
 
-// worker saga: makes the api call when watcher saga sees the action
+function* workerCommit(params) {
+  try {
+    console.log(params);
+    const data = yield call(api.postCommit, params.ticket, params.secret);
+    console.log(data);
+    yield put({ type: 'COMMIT_API_CALL_SUCCESS', data });
+  } catch (error) {
+    console.log(error);
+    yield put({ type: 'COMMIT_API_CALL_FAILURE', error });
+  }
+}
+
 function* workerAccount() {
   try {
     const data = yield call(api.getAccountInfo);
@@ -24,6 +35,7 @@ function* workerInfo() {
 export default function* watcherSaga() {
   yield all([
     takeLatest('ACCOUNT_API_CALL_REQUEST', workerAccount),
-    takeLatest('INFO_API_CALL_REQUEST', workerInfo)
+    takeLatest('INFO_API_CALL_REQUEST', workerInfo),
+    takeLatest('COMMIT_API_CALL_REQUEST', workerCommit)
   ]);
 }

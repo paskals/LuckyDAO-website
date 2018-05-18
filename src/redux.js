@@ -7,6 +7,10 @@ const INFO_API_CALL_REQUEST = 'INFO_API_CALL_REQUEST';
 const INFO_API_CALL_SUCCESS = 'INFO_API_CALL_SUCCESS';
 const INFO_API_CALL_FAILURE = 'INFO_API_CALL_FAILURE';
 
+const COMMIT_API_CALL_REQUEST = 'COMMIT_API_CALL_REQUEST';
+const COMMIT_API_CALL_SUCCESS = 'COMMIT_API_CALL_SUCCESS';
+const COMMIT_API_CALL_FAILURE = 'COMMIT_API_CALL_FAILURE';
+
 // reducer with initial state
 const initialState = {
   fetching: false,
@@ -30,6 +34,14 @@ export default function reducer(state = initialState, action) {
     case INFO_API_CALL_SUCCESS:
       return { ...state, fetching: false, info: action.info };
     case INFO_API_CALL_FAILURE:
+      return {
+        ...state, fetching: false, data: null, error: action.error
+      };
+    case COMMIT_API_CALL_REQUEST:
+      return { ...state, fetching: true, error: null };
+    case COMMIT_API_CALL_SUCCESS:
+      return { ...state, fetching: false, data: action.data };
+    case COMMIT_API_CALL_FAILURE:
       return {
         ...state, fetching: false, data: null, error: action.error
       };

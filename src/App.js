@@ -48,6 +48,7 @@ class App extends React.Component {
           fields={6}
           ticketPrice={this.props.info.ticketPrice}
           depositFraction={this.props.info.depositFraction}
+          onCommit={this.props.postCommit}
         />
       )
     );
@@ -59,6 +60,7 @@ class App extends React.Component {
           fields={6}
           ticketPrice={this.props.info.ticketPrice}
           depositFraction={this.props.info.depositFraction}
+          onCommit={this.props.postCommit}
         />
       )
     );
@@ -194,7 +196,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getInfo: () => dispatch({ type: 'INFO_API_CALL_REQUEST' }),
   getAccount: () => dispatch({ type: 'ACCOUNT_API_CALL_REQUEST' }),
-  onQuery: (schema, range) => dispatch({ type: 'API_CALL_REQUEST', schema, range })
+  postCommit: (ticket, secret) => dispatch({ type: 'COMMIT_API_CALL_REQUEST', ticket, secret })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

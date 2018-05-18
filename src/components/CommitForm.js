@@ -28,7 +28,7 @@ class CommitForm extends Component {
   handleBuy(e) {
     e.preventDefault();
     if (!this.state.numberError && !this.state.secretError) {
-      this.props.onBuy(this.state.number, this.state.secret);
+      this.props.onCommit(this.state.number, this.state.secret);
     }
   }
 
@@ -59,7 +59,7 @@ class CommitForm extends Component {
         {this.state.secret && this.state.secretError && <small className="require">Secret must have length of 6</small>}
         <Divider />
         <Button
-          onChange={this.handleBuy}
+          onClick={this.handleBuy}
           disabled={this.state.secretError || this.state.numberError}
           className="big-button"
           type="primary"

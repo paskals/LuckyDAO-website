@@ -17,6 +17,7 @@ myweb3.eth.net.getId().then((netId) => { console.log(netId); });
 const api = {
 
   currency: 'ETH',
+  constractAddress: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57',
 
   toWei: function toWei(value, unit) {
     return myweb3.utils.toWei(value, unit);
@@ -43,12 +44,22 @@ const api = {
         }));
   },
 
+  postCommit: function commit(weiValue, secret) {
+    return myweb3.eth.getAccounts().then(accounts => myweb3.eth
+      .sendTransaction({
+        from: accounts[0],
+        to: api.constractAddress,
+        value: weiValue,
+        data: secret
+      }));
+  },
+
   getCampainInfo: function getCampainInfo() {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(Object.assign({}, {
           depositFraction: 2,
-          commitStart: Date.now() + 50000,
+          commitStart: Date.now() + 5000,
           commitEnd: Date.now() + 500000,
           revealEnd: Date.now() + 500000,
           jackpot: api.toWei('1928', 'ether'),

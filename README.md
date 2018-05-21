@@ -1,7 +1,7 @@
 # Lucky Draw Dao
 More info [here](https://github.com/paradoxDAO/lottery-website/issues/1)
 
-[DEMO](http://bakaoh.github.io/LuckyDrawDao)
+[DEMO](http://paradoxDAO.github.io/LuckyDrawDao)
 
 ## Usage
 

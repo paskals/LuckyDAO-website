@@ -30,7 +30,7 @@ class AdminForm extends React.Component {
           label="Ticket Price"
         >
           {getFieldDecorator('ticketPrice', {
-            rules: [{ required: true, message: 'Please set ticket price!' }]
+            rules: [{ required: false, message: 'Please set ticket price!' }]
           })(<Input size="large" type="number" placeholder="Ticket price in Eth" />)}
         </FormItem>
 
@@ -39,7 +39,7 @@ class AdminForm extends React.Component {
           label="Deposit Fraction"
         >
           {getFieldDecorator('depositFraction', {
-            rules: [{ required: true, message: 'Please set deposit fraction!' }]
+            rules: [{ required: false, message: 'Please set deposit fraction!' }]
           })(<Slider size="large" marks={{ 0: '0%', 100: '100%' }} />)}
         </FormItem>
 
@@ -48,7 +48,7 @@ class AdminForm extends React.Component {
           label="Commit Start"
         >
           {getFieldDecorator('commitStart', {
-            rules: [{ type: 'object', required: true, message: 'Please select commit start time!' }]
+            rules: [{ type: 'object', required: false, message: 'Please select commit start time!' }]
           })(<DatePicker size="large" />)}
         </FormItem>
 
@@ -57,7 +57,7 @@ class AdminForm extends React.Component {
           label="Commit Deadline"
         >
           {getFieldDecorator('commitDeadline', {
-            rules: [{ type: 'object', required: true, message: 'Please select commit deadline time!' }]
+            rules: [{ type: 'object', required: false, message: 'Please select commit deadline time!' }]
           })(<DatePicker size="large" />)}
         </FormItem>
 
@@ -66,7 +66,7 @@ class AdminForm extends React.Component {
           label="Reveal Deadline"
         >
           {getFieldDecorator('revealDeadline', {
-            rules: [{ type: 'object', required: true, message: 'Please select reveal deadline time!' }]
+            rules: [{ type: 'object', required: false, message: 'Please select reveal deadline time!' }]
           })(<DatePicker size="large" />)}
         </FormItem>
 

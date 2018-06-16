@@ -17,13 +17,18 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 class App extends React.Component {
+  
   constructor(props) {
+    api.initWeb3();
     super(props);
     this.state = {
       openDialog: false,
       dialogTitle: '',
       dialog: null
     };
+
+    
+
     this.showAdmin = this.showAdmin.bind(this);
     this.showCommit = this.showCommit.bind(this);
     this.showReveal = this.showReveal.bind(this);
@@ -31,8 +36,12 @@ class App extends React.Component {
     this.closeDialog = this.closeDialog.bind(this);
     this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
     this.onCountdownEnd = this.onCountdownEnd.bind(this);
+
+    
   }
+
   componentDidMount() {
+    
     this.props.getInfo();
     this.props.getAccount();
   }
@@ -41,6 +50,8 @@ class App extends React.Component {
   }
   handleChangeCurrency(e) {
     api.setCurrency(e.target.value);
+    this.props.getInfo();
+    this.props.getAccount();
     this.forceUpdate();
   }
   closeDialog() {
